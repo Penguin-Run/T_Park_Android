@@ -3,6 +3,7 @@ package com.example.hw1_fragments_with_list;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ public class FragmentCloseUpDigit extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String text = "No";
         Bundle arguments = getArguments();
@@ -32,6 +33,7 @@ public class FragmentCloseUpDigit extends Fragment {
         TextView digit = ((TextView)view.findViewById(R.id.digit));
         digit.setText(text);
 
+        assert text != null;
         int num = Integer.parseInt(text);
         if (num % 2 == 0) digit.setTextColor(Color.RED);
         else digit.setTextColor(Color.BLUE);
@@ -39,7 +41,7 @@ public class FragmentCloseUpDigit extends Fragment {
 
     }
 
-    public static FragmentCloseUpDigit newInstance(int param) {
+    static FragmentCloseUpDigit newInstance(int param) {
         FragmentCloseUpDigit fragment = new FragmentCloseUpDigit();
         Bundle bundle = new Bundle();
         bundle.putString("digit", String.valueOf(param));
