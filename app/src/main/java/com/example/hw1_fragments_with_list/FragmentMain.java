@@ -74,7 +74,7 @@ public class FragmentMain extends Fragment {
             @Override
             public void onClick(View v) {
                 itemList.add(itemList.size()+1);
-                numbersList.getAdapter().notifyDataSetChanged();
+                numbersList.getAdapter().notifyItemInserted(itemList.size()-1);
             }
         });
     }
