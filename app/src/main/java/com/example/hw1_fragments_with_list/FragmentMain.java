@@ -26,6 +26,11 @@ import java.util.ArrayList;
 
 
 public class FragmentMain extends Fragment {
+    private static final int INITIAL_ELEMENTS_COUNT = 100;
+    private static final String ITEMLIST_KEY = "itemList";
+    private static final int VERTICAL_ORIENTATION_SPANCOUNT = 3;
+    private static final int HORIZONTAL_ORIENTATION_SPANCOUNT = 4;
+
     private ArrayList<Integer> itemList;
     private Activity activity;
     private RecyclerView numbersList;
@@ -33,7 +38,7 @@ public class FragmentMain extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putIntegerArrayList("itemList", itemList);
+        outState.putIntegerArrayList(ITEMLIST_KEY, itemList);
     }
 
     @Override
@@ -44,25 +49,23 @@ public class FragmentMain extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // creating list
         numbersList = view.findViewById(R.id.mainList);
-        if (savedInstanceState != null) itemList = savedInstanceState.getIntegerArrayList("itemList");
+        if (savedInstanceState != null) itemList = savedInstanceState.getIntegerArrayList(ITEMLIST_KEY);
         else {
             itemList = new ArrayList<>();
-            for (int i = 0; i < 100; i++) itemList.add(i+1);
+            for (int i = 0; i < INITIAL_ELEMENTS_COUNT; i++) itemList.add(i+1);
         }
         if (numbersList != null) {
             int spanCount;
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                spanCount = 4;
-            } else spanCount = 3;
+                spanCount = HORIZONTAL_ORIENTATION_SPANCOUNT;
+            } else spanCount = VERTICAL_ORIENTATION_SPANCOUNT;
             numbersList.setAdapter(new mainListAdapter(itemList));
             numbersList.setLayoutManager(new GridLayoutManager(view.getContext(), spanCount, RecyclerView.VERTICAL, false));
-        } else {
-            // error log
         }
 
         // attaching lusteners
@@ -72,13 +75,12 @@ public class FragmentMain extends Fragment {
             public void onClick(View v) {
                 itemList.add(itemList.size()+1);
                 numbersList.getAdapter().notifyDataSetChanged();
-
             }
         });
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof Activity) {
             activity = (Activity)context;
@@ -88,16 +90,15 @@ public class FragmentMain extends Fragment {
     class mainListAdapter extends RecyclerView.Adapter<mainListViewHolder> {
         ArrayList<Integer> integers;
 
-        public mainListAdapter(ArrayList<Integer> integers) {
+        mainListAdapter(ArrayList<Integer> integers) {
             this.integers = integers;
         }
 
         @NonNull
         @Override
         public mainListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_list_item, parent, false); // try MainActivity.this just for curiosity
-            mainListViewHolder holder = new mainListViewHolder(itemView);
-            return holder;
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_list_item, parent, false);
+            return new mainListViewHolder(itemView);
         }
 
         @Override
@@ -128,10 +129,10 @@ public class FragmentMain extends Fragment {
 
     }
 
-    class mainListViewHolder extends RecyclerView.ViewHolder {
+    static class mainListViewHolder extends RecyclerView.ViewHolder {
         TextView digit;
 
-        public mainListViewHolder(@NonNull View itemView) {
+        mainListViewHolder(@NonNull View itemView) {
             super(itemView);
             digit = itemView.findViewById(R.id.digit);
         }
