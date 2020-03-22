@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 
 public class FragmentCloseUpDigit extends Fragment {
+    private static final String DIGIT_KEY = "digit";
+
     TextView digit;
 
     @Override
@@ -28,7 +30,7 @@ public class FragmentCloseUpDigit extends Fragment {
         String text = "No";
         Bundle arguments = getArguments();
         if (arguments != null) {
-            text = arguments.getString("digit");
+            text = arguments.getString(DIGIT_KEY);
         }
         TextView digit = ((TextView)view.findViewById(R.id.digit));
         digit.setText(text);
@@ -44,7 +46,7 @@ public class FragmentCloseUpDigit extends Fragment {
     static FragmentCloseUpDigit newInstance(int param) {
         FragmentCloseUpDigit fragment = new FragmentCloseUpDigit();
         Bundle bundle = new Bundle();
-        bundle.putString("digit", String.valueOf(param));
+        bundle.putString(DIGIT_KEY, String.valueOf(param));
         fragment.setArguments(bundle);
         return fragment;
     }
